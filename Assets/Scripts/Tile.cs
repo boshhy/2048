@@ -27,10 +27,23 @@ public class Tile : MonoBehaviour
         background.color = state.backgroundColor;
         text.color = state.textColor;
         text.text = number.ToString();
-
     }
 
     public void Spawn(TileCell cell)
+    {
+        if (this.cell != null)
+        {
+            this.cell = null;
+        }
+        this.cell = cell;
+        this.cell.tile = this;
+
+        //this.cell.tile.text.text = this.cell.coordinates.ToString();
+
+        transform.position = cell.transform.position;
+    }
+
+    public void MoveTo(TileCell cell)
     {
         if (this.cell != null)
         {
