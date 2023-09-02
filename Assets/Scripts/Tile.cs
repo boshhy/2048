@@ -33,7 +33,7 @@ public class Tile : MonoBehaviour
     {
         if (this.cell != null)
         {
-            this.cell = null;
+            this.cell.tile = null;
         }
         this.cell = cell;
         this.cell.tile = this;
@@ -47,7 +47,7 @@ public class Tile : MonoBehaviour
     {
         if (this.cell != null)
         {
-            this.cell = null;
+            this.cell.tile = null;
         }
         this.cell = cell;
         this.cell.tile = this;

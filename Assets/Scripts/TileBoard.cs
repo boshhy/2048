@@ -85,7 +85,7 @@ public class TileBoard : MonoBehaviour
             }
 
             newCell = adjacent;
-            tile.cell.tile = null;
+
             adjacent = grid.GetAdjacentCell(adjacent, direction);
         }
         if (newCell != null)
