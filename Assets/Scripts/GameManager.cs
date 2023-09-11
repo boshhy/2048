@@ -86,11 +86,17 @@ public class GameManager : MonoBehaviour
         if (score > highScore)
         {
             PlayerPrefs.SetInt("highScore", score);
+            highScoreText.text = score.ToString();
         }
     }
 
     private int LoadHighScore()
     {
         return PlayerPrefs.GetInt("highScore", 0);
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }
