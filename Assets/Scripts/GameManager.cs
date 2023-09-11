@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using Unity.Mathematics;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
     public TileBoard board;
     public CanvasGroup gameOver;
 
+    public TextMeshProUGUI currentScoreText;
+    public TextMeshProUGUI highScoreText;
+    public int score;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +28,9 @@ public class GameManager : MonoBehaviour
 
     public void NewGame()
     {
+        SetScore(0);
+        highScoreText.text = LoadHighScore().ToString();
+
         gameOver.alpha = 0.0f;
         gameOver.interactable = false;
 
@@ -56,7 +64,33 @@ public class GameManager : MonoBehaviour
         }
 
         canvasGroup.alpha = to;
+    }
 
+    public void IncreaseScore(int points)
+    {
+        SetScore(score + points);
+    }
 
+    private void SetScore(int score)
+    {
+        this.score = score;
+        currentScoreText.text = this.score.ToString();
+
+        SaveHighScore();
+    }
+
+    private void SaveHighScore()
+    {
+        int highScore = LoadHighScore();
+
+        if (score > highScore)
+        {
+            PlayerPrefs.SetInt("highScore", score);
+        }
+    }
+
+    private int LoadHighScore()
+    {
+        return PlayerPrefs.GetInt("highScore", 0);
     }
 }
