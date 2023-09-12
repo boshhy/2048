@@ -36,26 +36,45 @@ public class TileGrid : MonoBehaviour
 
     public TileCell GetRandomEmptyCell()
     {
-        int index = Random.Range(0, cells.Length);
-        int startingIndex = index;
+        List<int> emptyCells = new List<int>();
 
-        while (cells[index].occupied)
+        for (int i = 0; i < cells.Length; i++)
         {
-            index++;
-
-            if (index >= cells.Length)
+            if (cells[i].empty)
             {
-                index = 0;
+                emptyCells.Add(i);
             }
-
-            if (index == startingIndex)
-            {
-                return null;
-            }
-
         }
 
+        if (emptyCells.Count == 0)
+        {
+            return null;
+        }
+
+        int index = emptyCells[Random.Range(0, emptyCells.Count)];
         return cells[index];
+
+
+        // int index = Random.Range(0, cells.Length);
+        // int startingIndex = index;
+
+        // while (cells[index].occupied)
+        // {
+        //     index++;
+
+        //     if (index >= cells.Length)
+        //     {
+        //         index = 0;
+        //     }
+
+        //     if (index == startingIndex)
+        //     {
+        //         return null;
+        //     }
+
+        // }
+
+        //return cells[index];
     }
 
     public TileCell GetCell(int x, int y)
