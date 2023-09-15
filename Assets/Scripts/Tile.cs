@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+
+// Used to keep track of the state of the tile and
+// what cell it belongs to
 public class Tile : MonoBehaviour
 {
     // Used to set and get the state of this tile
