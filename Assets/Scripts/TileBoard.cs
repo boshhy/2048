@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.InputSystem;
 
 // Used to keep track of the game board
 public class TileBoard : MonoBehaviour
@@ -26,11 +27,15 @@ public class TileBoard : MonoBehaviour
     // Used to disable input while changes are being made
     private bool waiting;
 
+    private PlayerController playerInput;
+    private Vector2 controllerMovement;
+
     // Get the tile grid, and create an empty list of tiles
     private void Awake()
     {
         grid = GetComponentInChildren<TileGrid>();
         tiles = new List<Tile>();
+        playerInput = new PlayerController();
     }
 
     // Used to get input from user
@@ -39,31 +44,33 @@ public class TileBoard : MonoBehaviour
         // Accept input if not waiting
         if (!waiting)
         {
+
             // up
-            if (Input.GetKeyDown(KeyCode.W))
+            if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow) || controllerMovement == Vector2.up)
             {
                 // up
                 MoveTiles(Vector2Int.up, 0, 1, 1, 1);
             }
             // down
-            else if (Input.GetKeyDown(KeyCode.S))
+            else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow) || controllerMovement == Vector2.down)
             {
                 // down
                 MoveTiles(Vector2Int.down, 0, 1, grid.height - 2, -1);
             }
             // left
-            else if (Input.GetKeyDown(KeyCode.A))
+            else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow) || controllerMovement == Vector2.left)
             {
                 // left
                 MoveTiles(Vector2Int.left, 1, 1, 0, 1);
             }
             // right
-            else if (Input.GetKeyDown(KeyCode.D))
+            else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow) || controllerMovement == Vector2.right)
             {
                 // right
                 MoveTiles(Vector2Int.right, grid.width - 2, -1, 0, 1);
             }
         }
+        controllerMovement = Vector2.zero;
     }
 
     // Used to move tiles in a certain direction
@@ -291,5 +298,42 @@ public class TileBoard : MonoBehaviour
         // If no empty cells exist or any tiles can merge
         // then return true for game over
         return true;
+    }
+
+    void OnEnable()
+    {
+        playerInput.Player.Movement.Enable();
+        playerInput.Player.Movement.started += MoveTilesWithController;
+    }
+
+    private void OnDisable()
+    {
+        playerInput.Player.Movement.Disable();
+        playerInput.Player.Movement.started -= MoveTilesWithController;
+    }
+
+    private void MoveTilesWithController(InputAction.CallbackContext cntx)
+    {
+        Vector2 inputVector = cntx.ReadValue<Vector2>();
+
+        if (inputVector == Vector2.up)
+        {
+            controllerMovement = Vector2.up;
+        }
+
+        else if (inputVector == Vector2.down)
+        {
+            controllerMovement = Vector2.down;
+        }
+
+        else if (inputVector == Vector2.left)
+        {
+            controllerMovement = Vector2.left;
+        }
+
+        else if (inputVector == Vector2.right)
+        {
+            controllerMovement = Vector2.right;
+        }
     }
 }
